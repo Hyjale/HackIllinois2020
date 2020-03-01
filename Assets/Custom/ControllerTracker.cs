@@ -15,11 +15,13 @@ public class ControllerTracker : MonoBehaviour
     [SerializeField] Vector3 leftHandPosition;
     [SerializeField] Vector3 rightHandPosition;
     [SerializeField] float timeStamp;
+    [SerializeField] int index;
 
-    private List<string[]> rows;
+    private List<string[]> recordEntry;
 
-    // Testing
     public bool saveData;
+    public bool record;
+    public bool recording;
 
     private void Start()
     {
@@ -27,11 +29,40 @@ public class ControllerTracker : MonoBehaviour
         leftController = null;
         leftHandPosition = Vector3.zero;
         rightHandPosition = Vector3.zero;
-        rows = new List<string[]>();
+        recordEntry = new List<string[]>();
+
         saveData = false;
+        recording = false;
     }
 
     void Update()
+    {
+        if (!record)
+        {
+            if (recording)
+            {
+                //SaveRun();
+                recording = false;
+                index++;
+            }
+
+            return;
+        }
+
+        else
+        {
+            if (!recording)
+            {
+                //MakeRun();
+                recording = true;
+            }
+
+            UpdateData();
+            UpdateRun();
+        }
+    }
+
+    void UpdateData()
     {
         if (rightController == null)
         {
@@ -56,44 +87,37 @@ public class ControllerTracker : MonoBehaviour
         }
 
         timeStamp = Time.time;
-
-        // Create new entry
-        CreateEntry();
-
-        if (saveData)
-        {
-            SaveData();
-            saveData = false;
-        }
     }
 
-    void CreateEntry()
+    void UpdateRun()
     {
-        string[] leftData = new string[5];
-        leftData[0] = "Left";
-        leftData[1] = leftHandPosition.x.ToString();
-        leftData[2] = leftHandPosition.y.ToString();
-        leftData[3] = leftHandPosition.z.ToString();
-        leftData[4] = timeStamp.ToString();
+        string[] leftData = new string[6];
+        leftData[0] = index.ToString();
+        leftData[1] = "Left";
+        leftData[2] = leftHandPosition.x.ToString();
+        leftData[3] = leftHandPosition.y.ToString();
+        leftData[4] = leftHandPosition.z.ToString();
+        leftData[5] = timeStamp.ToString();
 
-        string[] rightData = new string[5];
-        rightData[0] = "Right";
-        rightData[1] = leftHandPosition.x.ToString();
-        rightData[2] = leftHandPosition.y.ToString();
-        rightData[3] = leftHandPosition.z.ToString();
-        rightData[4] = timeStamp.ToString();
+        string[] rightData = new string[6];
+        rightData[0] = index.ToString();
+        rightData[1] = "Right";
+        rightData[2] = rightHandPosition.x.ToString();
+        rightData[3] = rightHandPosition.y.ToString();
+        rightData[4] = rightHandPosition.z.ToString();
+        rightData[5] = timeStamp.ToString();
 
-        rows.Add(leftData);
-        rows.Add(rightData);
+        recordEntry.Add(leftData);
+        recordEntry.Add(rightData);
     }
 
-    void SaveData()
+    public void SaveData()
     {
-        string[][] output = new string[rows.Count][];
+        string[][] output = new string[recordEntry.Count][];
 
         for (int i = 0; i < output.Length; i++)
         {
-            output[i] = rows[i];
+            output[i] = recordEntry[i];
         }
 
         int length = output.GetLength(0);
