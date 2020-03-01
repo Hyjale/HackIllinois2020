@@ -1,0 +1,22 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Spartan', sans-serif;
+}
+
+.graph {
+    width:500px;
+    height:500px;
+    /* width: 200px;
+    height: 200px; */
+    display: inline-block;
+}
+
+.interaction {
+    display: inline-block;
+    margin:auto;
+    width: 40%;
+}
+
+.header {
+    text-align: center;
+}

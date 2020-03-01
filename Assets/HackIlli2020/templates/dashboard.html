@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Spartan&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <h1 class="header"> Dashboard </h1>
+    <h2 class="header"> Data Analytics </h2>
+    {% for k, v in graphs.items() %}
+    <div style="width:100%; text-align: center;">
+    <h3>{{ k }}</h3>
+    {% for pair in v %}
+
+    {% for address in pair[1] %}
+    <div class="interaction">
+    <p>{{ pair[0] }}</p>
+    <img class="graph" src="{{ url_for('static', filename=address) }}"/>
+    </div>
+    {% endfor %}
+
+    {% endfor %}
+    </div>
+    {% endfor %}
+  </body>
+  
+</html>

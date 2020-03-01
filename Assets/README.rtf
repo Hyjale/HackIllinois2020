@@ -1,0 +1,60 @@
+{\rtf1\ansi\ansicpg949\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww21440\viewh12960\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Columns Explanation\
+\
+# mapSize.csv\
+# Stores the range of the map as constants\
+MapXNeg(int): maximum negative x value of the map\
+MapXPos(int): maximum positive x value of the map\
+MapZNeg(int): maximum negative z value of the map\
+MapZPos(int): maximum positive z value of the map\
+\
+# position.csv\
+UserID(int): distinct ID of the user\
+Time(double): Time\
+XPos(double): X position of the user\
+ZPos(double): Z position of the user\
+\
+# objectInteractionTime.csv\
+# When IndexTrigger or HandTrigger, ControlPoint is always true (for the controller that the button is pressed)\
+# When ControlPoint and other actions are initiated, the new action is written in a new row\
+# ControlPoint ends when the point ends, regardless of the values of IndexTrigger and HandTrigger\
+\
+Tracks the interaction of the objects with the user\
+ ObjectName(str): verbal name of each objects\
+\
+#(Either LeftControlPoint or RightControlPoint should be 1)\
+LeftControlPoint(bool): True if the left controller points at the object\
+RightControlPoint(bool): True if the right controller points at the object \
+\
+PrimaryIndexTrigger(bool): True if the button is pressed\
+PrimaryHandTrigger(bool): True if the button is pressed\
+SecondaryIndexTrigger(bool): True if the button is pressed\
+SecondaryHandTrigger(bool): True if the button is pressed  \
+\
+IsMarked(bool):  True if the object has already been marked, false if the object has not been marked (when IsMarked && IndexTrigger, IsMarked becomes false)\
+InterInit(int): Initial interaction time\
+InterEnd(int): End interaction time\
+\
+ObjXInit(int): Initial x position of the object\
+ObjXEnd(int): End x position of the object\
+ObjYInit(int): Initial y position of the object\
+ObjYEnd(int): End y position of the object\
+ObjZInit(int): Initial z position of the object\
+ObjZEnd(int): End z position of the object\
+\
+# objectGaze.csv\
+UserID(int): distinct ID of the user\
+ObjectName(str): verbal name of each objects\
+InterInit(int): Initial interaction time\
+InterEnd(int): End interaction time\
+\
+\
+\
+\
+}
