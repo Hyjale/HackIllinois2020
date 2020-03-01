@@ -12,15 +12,25 @@ public class ControllerPointerTracker : MonoBehaviour
     [SerializeField] VRTK_BasePointerRenderer leftBasePointerRenderer;
     [SerializeField] VRTK_Pointer rightPointer;
     [SerializeField] VRTK_BasePointerRenderer rightBasePointerRenderer;
+    [SerializeField] VRTK_InteractGrab leftGrab;
+    [SerializeField] VRTK_InteractGrab rightGrab;
 
     private float startInteractionLeft;
     private float startInteractionRight;
     private float endInteractionLeft;
     private float endInteractionRight;
+
+    private float startClickLeft;
+    private float startClickRight;
+    private float endClickLeft;
+    private float endClickRight;
+
     private string objectInteractedLeft;
     private string objectInteractedRight;
     private string participantID;
     private bool startWriting;
+
+    private string filePath;
 
     // Start is called before the first frame update
     void Start()
@@ -29,10 +39,18 @@ public class ControllerPointerTracker : MonoBehaviour
         startInteractionRight = 0f;
         endInteractionLeft = 0f;
         endInteractionRight = 0f;
+
+        startClickLeft = 0f;
+        startClickRight = 0f;
+        endClickLeft = 0f;
+        endClickRight = 0f;
+
         objectInteractedLeft = "";
         objectInteractedRight = "";
         participantID = "SomeID";
         startWriting = true;
+
+        filePath = GetFilePath();
 
         if (leftPointer != null && rightPointer != null && leftBasePointerRenderer != null && rightBasePointerRenderer != null)
         {
@@ -57,31 +75,93 @@ public class ControllerPointerTracker : MonoBehaviour
     {
         startInteractionLeft = Time.time;
         objectInteractedLeft = e.target.name;
+
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+        {
+            startClickLeft = Time.time;
+
+            if (e.target.gameObject.CompareTag("Marked"))
+            {
+                e.target.gameObject.tag = "Untagged";
+            } else
+            {
+                e.target.gameObject.tag = "Marked";
+            }
+        }
+
+        if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger))
+        {
+            endClickLeft = Time.time;
+
+            bool marked = false;
+
+            if (e.target.gameObject.CompareTag("Marked"))
+                marked = true;
+
+            addRecord(objectInteractedLeft, startClickLeft, endClickLeft, e.target.position.x, e.target.position.x, e.target.position.y, e.target.position.y, e.target.position.z, e.target.position.z, filePath, 1, 0, 1, 0, 0, 0, (marked ? 1 : 0));
+
+            startClickLeft = 0f;
+            endClickLeft = 0f;
+        }
     }
 
     private void enterRight(object sender, DestinationMarkerEventArgs e)
     {
         startInteractionRight = Time.time;
         objectInteractedRight = e.target.name;
+
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+        {
+            startClickRight = Time.time;
+
+            if (e.target.gameObject.CompareTag("Marked"))
+            {
+                e.target.gameObject.tag = "Untagged";
+            }
+            else
+            {
+                e.target.gameObject.tag = "Marked";
+            }
+        }
+
+        if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
+        {
+            endClickRight = Time.time;
+
+            bool marked = false;
+
+            if (e.target.gameObject.CompareTag("Marked"))
+                marked = true;
+
+            addRecord(objectInteractedRight, startClickRight, endClickRight, e.target.position.x, e.target.position.x, e.target.position.y, e.target.position.y, e.target.position.z, e.target.position.z, filePath, 0, 1, 0, 0, 1, 0, (marked ? 1 : 0));
+
+            startClickRight = 0f;
+            endClickRight = 0f;
+        }
     }
 
     private void exitLeft(object sender, DestinationMarkerEventArgs e)
     {
         endInteractionLeft = Time.time;
-        string filePath = GetFilePath();
-        addRecord(participantID, "Left", objectInteractedLeft, startInteractionLeft, endInteractionLeft, filePath);
-        print("Pointer entered " + e.target.name + " on Controller index [" + e.controllerReference + "]");
+        addRecord(objectInteractedLeft, startInteractionLeft, endInteractionLeft, e.target.position.x, e.target.position.x, e.target.position.y, e.target.position.y, e.target.position.z, e.target.position.z, filePath, 1);
+
+        startInteractionLeft = 0f;
+        endInteractionLeft = 0f;
     }
 
     private void exitRight(object sender, DestinationMarkerEventArgs e)
     {
         endInteractionRight = Time.time;
-        string filePath = GetFilePath();
-        addRecord(participantID, "Right", objectInteractedRight, startInteractionRight, endInteractionRight, filePath);
-        print("Pointer entered " + e.target.name + " on Controller index [" + e.controllerReference + "]");
+        addRecord(objectInteractedRight, startInteractionRight, endInteractionRight, e.target.position.x, e.target.position.x, e.target.position.y, e.target.position.y, e.target.position.z, e.target.position.z, filePath, 0, 1);
+
+        startInteractionRight = 0f;
+        endInteractionRight = 0f;
     }
 
-    private void addRecord(string ID, string controllerType, string interactedObject, float startTime, float endTime, string filePath)
+    private void addRecord(string objectName, float startTime, float endTime, float objXInt, float objXEnd,
+                           float objYInit, float objYEnd, float objZInit, float objZEnd, string filePath,
+                           int leftControllerPointer = 0, int rightControllerPointer = 0, int primaryIndexTrigger = 0, 
+                           int primaryHandTrigger = 0, int secondaryIndexTrigger = 0, int secondaryHandTrigger = 0, int isMarked = 0)
     {
         print("Writing to file");
         try
@@ -90,14 +170,17 @@ public class ControllerPointerTracker : MonoBehaviour
             {
                 using (StreamWriter file = new StreamWriter(@filePath, false))
                 {
-                    file.WriteLine(ID + "," + controllerType + "," + interactedObject + "," + startTime + "," + endTime);
+                    file.WriteLine("ObjectName,LeftControlPoint,RightControlPoint,PrimaryIndexTrigger,PrimaryHandTrigger,SecondaryIndexTrigger,SecondaryHandTrigger,IsMarked,InterInit,InterEnd,ObjXInit,ObjXEnd,ObjYInit,ObjYEnd,ObjZInit,ObjZEnd");
                 }
                 startWriting = false;
             } else
             {
                 using (StreamWriter file = new StreamWriter(@filePath, true))
                 {
-                    file.WriteLine(ID + "," + controllerType + "," + interactedObject + "," + startTime + "," + endTime);
+                    file.WriteLine(objectName + "," + leftControllerPointer + "," + rightControllerPointer + ","
+                                   + primaryIndexTrigger + "," + primaryHandTrigger + "," + secondaryIndexTrigger + ","
+                                   + secondaryHandTrigger + "," + isMarked + "," + startTime + "," + endTime + "," 
+                                   + objXInt + "," + objXEnd + "," + objYInit + "," + objYEnd + "," + objZInit + "," + objZEnd);
                 }
             }
         }
@@ -109,7 +192,7 @@ public class ControllerPointerTracker : MonoBehaviour
 
     string GetFilePath()
     {
-        return Application.dataPath + "/" + "PointerData.csv";
+        return Application.dataPath + "/" + "objectInteractionTime.csv";
     }
 }
 

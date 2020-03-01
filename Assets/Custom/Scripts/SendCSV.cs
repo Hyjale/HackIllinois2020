@@ -13,7 +13,8 @@ public class SendCSV : MonoBehaviour
     private string fromAddress;
     [SerializeField] string toAddress;
     [SerializeField] List<string> filePaths;
-    private void Start()
+
+    public void OnApplicationQuit()
     {
         fromAddress = "vrdatagenerator@gmail.com";
         SendSmtpMail();

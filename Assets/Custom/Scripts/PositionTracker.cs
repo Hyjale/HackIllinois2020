@@ -42,7 +42,7 @@ public class PositionTracker : MonoBehaviour
             {
                 using (StreamWriter file = new StreamWriter(@filePath, false))
                 {
-                    file.WriteLine("UserID" + "," + "Time" + "," + "XPos" + "," + "Zpos");
+                    file.WriteLine("UserID" + "," + "Time" + "," + "XPos" + "," + "ZPos");
                 }
                 startWriting = false;
             } else
