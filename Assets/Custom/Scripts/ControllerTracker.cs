@@ -23,6 +23,11 @@ public class ControllerTracker : MonoBehaviour
     public bool record;
     public bool recording;
 
+    public string participantID = "NULL";
+
+    [SerializeField] int dropRate = 3;
+    private int dropIndex = 0;
+
     private void Start()
     {
         rightController = null;
@@ -57,8 +62,14 @@ public class ControllerTracker : MonoBehaviour
                 recording = true;
             }
 
-            UpdateData();
-            UpdateRun();
+            if (dropIndex == 0)
+            {
+                UpdateData();
+                UpdateRun();
+                dropIndex++;
+                dropIndex = dropIndex % dropRate;
+            }
+            
         }
     }
 
@@ -91,21 +102,23 @@ public class ControllerTracker : MonoBehaviour
 
     void UpdateRun()
     {
-        string[] leftData = new string[6];
+        string[] leftData = new string[7];
         leftData[0] = index.ToString();
-        leftData[1] = "Left";
-        leftData[2] = leftHandPosition.x.ToString();
-        leftData[3] = leftHandPosition.y.ToString();
-        leftData[4] = leftHandPosition.z.ToString();
-        leftData[5] = timeStamp.ToString();
+        leftData[1] = participantID;
+        leftData[2] = "Left";
+        leftData[3] = leftHandPosition.x.ToString();
+        leftData[4] = leftHandPosition.y.ToString();
+        leftData[5] = leftHandPosition.z.ToString();
+        leftData[6] = timeStamp.ToString();
 
-        string[] rightData = new string[6];
+        string[] rightData = new string[7];
         rightData[0] = index.ToString();
-        rightData[1] = "Right";
-        rightData[2] = rightHandPosition.x.ToString();
-        rightData[3] = rightHandPosition.y.ToString();
-        rightData[4] = rightHandPosition.z.ToString();
-        rightData[5] = timeStamp.ToString();
+        rightData[1] = participantID;
+        rightData[2] = "Right";
+        rightData[3] = rightHandPosition.x.ToString();
+        rightData[4] = rightHandPosition.y.ToString();
+        rightData[5] = rightHandPosition.z.ToString();
+        rightData[6] = timeStamp.ToString();
 
         recordEntry.Add(leftData);
         recordEntry.Add(rightData);
@@ -139,6 +152,6 @@ public class ControllerTracker : MonoBehaviour
 
     string GetFilePath()
     {
-        return Application.dataPath + "/" + "HandData.csv";
+        return Application.dataPath + "/" + "hand_data.csv";
     }
 }

@@ -7,9 +7,6 @@ using VRTK;
 
 public class ControllerPointerTracker : MonoBehaviour
 {
-    [Header("File Path")]
-    [SerializeField] string filePath; 
-
     [Header("VRTK Components")]
     [SerializeField] VRTK_Pointer leftPointer;
     [SerializeField] VRTK_BasePointerRenderer leftBasePointerRenderer;
@@ -23,6 +20,7 @@ public class ControllerPointerTracker : MonoBehaviour
     private string objectInteractedLeft;
     private string objectInteractedRight;
     private string participantID;
+    private bool startWriting;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +32,7 @@ public class ControllerPointerTracker : MonoBehaviour
         objectInteractedLeft = "";
         objectInteractedRight = "";
         participantID = "SomeID";
+        startWriting = true;
 
         if (leftPointer != null && rightPointer != null && leftBasePointerRenderer != null && rightBasePointerRenderer != null)
         {
@@ -69,6 +68,7 @@ public class ControllerPointerTracker : MonoBehaviour
     private void exitLeft(object sender, DestinationMarkerEventArgs e)
     {
         endInteractionLeft = Time.time;
+        string filePath = GetFilePath();
         addRecord(participantID, "Left", objectInteractedLeft, startInteractionLeft, endInteractionLeft, filePath);
         print("Pointer entered " + e.target.name + " on Controller index [" + e.controllerReference + "]");
     }
@@ -76,6 +76,7 @@ public class ControllerPointerTracker : MonoBehaviour
     private void exitRight(object sender, DestinationMarkerEventArgs e)
     {
         endInteractionRight = Time.time;
+        string filePath = GetFilePath();
         addRecord(participantID, "Right", objectInteractedRight, startInteractionRight, endInteractionRight, filePath);
         print("Pointer entered " + e.target.name + " on Controller index [" + e.controllerReference + "]");
     }
@@ -85,9 +86,19 @@ public class ControllerPointerTracker : MonoBehaviour
         print("Writing to file");
         try
         {
-            using (StreamWriter file = new StreamWriter(@filePath, true))
+            if (startWriting)
             {
-                file.WriteLine(ID + "," + controllerType + "," + interactedObject + "," + startTime + "," + endTime);
+                using (StreamWriter file = new StreamWriter(@filePath, false))
+                {
+                    file.WriteLine(ID + "," + controllerType + "," + interactedObject + "," + startTime + "," + endTime);
+                }
+                startWriting = false;
+            } else
+            {
+                using (StreamWriter file = new StreamWriter(@filePath, true))
+                {
+                    file.WriteLine(ID + "," + controllerType + "," + interactedObject + "," + startTime + "," + endTime);
+                }
             }
         }
         catch (Exception ex)
