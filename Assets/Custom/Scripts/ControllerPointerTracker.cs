@@ -95,6 +95,11 @@ public class ControllerPointerTracker : MonoBehaviour
             Debug.Log("Something went wrong! Error: " + ex.Message);
         }
     }
+
+    string GetFilePath()
+    {
+        return Application.dataPath + "/" + "PointerData.csv";
+    }
 }
 
 // End of File.

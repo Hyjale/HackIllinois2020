@@ -139,6 +139,6 @@ public class ControllerTracker : MonoBehaviour
 
     string GetFilePath()
     {
-        return Application.dataPath + "/" + "hand_data.csv";
+        return Application.dataPath + "/" + "HandData.csv";
     }
 }

@@ -2,3 +2,71 @@ SomeID,Right,Plane,7.147413,9.6813
 SomeID,Right,Plane,11.32565,12.7254
 SomeID,Left,Plane,15.32541,17.14758
 SomeID,Left,Plane,19.50291,21.19033
+SomeID,Right,KeyboardCollider,7.781551,10.47105
+SomeID,Left,KeyboardCollider,7.825753,10.47105
+SomeID,Right,Plane,7.224652,7.523499
+SomeID,Right,KeyboardCollider,7.523499,12.62416
+SomeID,Right,Key: q,12.62416,12.64562
+SomeID,Right,KeyboardCollider,12.64562,12.68993
+SomeID,Right,Key: q,12.68993,12.72337
+SomeID,Right,Key: `,12.72337,12.94582
+SomeID,Right,Clear,12.94582,13.968
+SomeID,Right,Key: `,13.968,13.968
+SomeID,Right,Plane,15.74588,16.74639
+SomeID,Right,KeyboardCollider,2.695839,3.76404
+SomeID,Right,Plane,3.76404,5.187288
+SomeID,Right,Plane,8.166432,8.733337
+SomeID,Right,KeyboardCollider,11.5778,14.81108
+SomeID,Right,KeyboardCollider,14.84613,18.68873
+SomeID,Right,KeyboardCollider,21.80025,21.86706
+SomeID,Right,Shift,21.86706,21.92356
+SomeID,Right,Plane,22.18962,22.57723
+SomeID,Right,Plane,23.92303,24.3004
+SomeID,Right,KeyboardCollider,24.65535,24.9558
+SomeID,Right,Plane,29.12258,29.72261
+SomeID,Right,Plane,31.01135,31.32178
+SomeID,Right,Plane,31.87784,32.08894
+SomeID,Right,Plane,3.302672,3.6473
+SomeID,Right,Plane,4.001936,4.157326
+SomeID,Right,Plane,4.001936,0
+SomeID,Right,.com Key,7.424018,7.590654
+SomeID,Right,KeyboardCollider,7.590654,8.3687
+SomeID,Right,Clear,8.468802,9.146783
+SomeID,Right,@ Key,9.24614,9.268665
+SomeID,Right,KeyboardCollider,9.268665,9.591105
+SomeID,Right,.com Key,9.591105,9.623959
+SomeID,Right,KeyboardCollider,9.623959,9.76919
+SomeID,Right,KeyboardCollider,11.11316,11.72426
+SomeID,Right,Plane,11.86944,12.21289
+SomeID,Right,@ Key,13.39089,13.40228
+SomeID,Right,.com Key,13.40228,13.49054
+SomeID,Right,KeyboardCollider,13.49054,13.76909
+SomeID,Right,Plane,13.76909,14.81349
+SomeID,Right,KeyboardCollider,15.758,16.04639
+SomeID,Right,.com Key,16.04639,16.60177
+SomeID,Right,@ Key,16.60177,16.6239
+SomeID,Right,Clear,16.86871,16.99148
+SomeID,Right,Clear,17.20174,18.00197
+SomeID,Right,KeyboardCollider,18.147,18.22414
+SomeID,Right,.com Key,18.22414,18.3022
+SomeID,Right,KeyboardCollider,18.3022,18.32438
+SomeID,Right,.com Key,18.32438,18.36903
+SomeID,Right,KeyboardCollider,18.36903,18.39097
+SomeID,Right,.com Key,18.39097,18.44696
+SomeID,Right,KeyboardCollider,18.44696,18.79118
+SomeID,Right,Plane,18.79118,19.54626
+SomeID,Right,Plane,18.79118,0
+SomeID,Right,Plane,1.914915,2.470052
+SomeID,Right,KeyboardCollider,2.880961,3.725918
+SomeID,Right,Clear,3.870159,4.504234
+SomeID,Right,KeyboardCollider,4.581527,4.970707
+SomeID,Right,.com Key,4.970707,5.049062
+SomeID,Right,KeyboardCollider,5.049062,5.082015
+SomeID,Right,.com Key,5.082015,5.104265
+SomeID,Right,KeyboardCollider,5.104265,5.659729
+SomeID,Right,Plane,4.741774,5.175272
+SomeID,Right,KeyboardCollider,5.497071,11.86474
+SomeID,Right,Plane,11.86474,13.04243
+SomeID,Right,KeyboardCollider,13.04243,14.52021
+SomeID,Right,Plane,14.52021,14.63123
+SomeID,Right,KeyboardCollider,14.63123,14.77548
