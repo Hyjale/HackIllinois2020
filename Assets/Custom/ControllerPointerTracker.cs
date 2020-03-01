@@ -7,6 +7,10 @@ using VRTK;
 
 public class ControllerPointerTracker : MonoBehaviour
 {
+    [Header("File Path")]
+    [SerializeField] string filePath; 
+
+    [Header("VRTK Components")]
     [SerializeField] VRTK_Pointer leftPointer;
     [SerializeField] VRTK_BasePointerRenderer leftBasePointerRenderer;
     [SerializeField] VRTK_Pointer rightPointer;
@@ -16,6 +20,8 @@ public class ControllerPointerTracker : MonoBehaviour
     private float startInteractionRight;
     private float endInteractionLeft;
     private float endInteractionRight;
+    private string objectInteractedLeft;
+    private string objectInteractedRight;
     private string participantID;
 
     // Start is called before the first frame update
@@ -25,6 +31,8 @@ public class ControllerPointerTracker : MonoBehaviour
         startInteractionRight = 0f;
         endInteractionLeft = 0f;
         endInteractionRight = 0f;
+        objectInteractedLeft = "";
+        objectInteractedRight = "";
         participantID = "SomeID";
 
         if (leftPointer != null && rightPointer != null && leftBasePointerRenderer != null && rightBasePointerRenderer != null)
@@ -39,53 +47,54 @@ public class ControllerPointerTracker : MonoBehaviour
             rightPointer.DestinationMarkerEnter += enterRight;
 
             leftPointer.PointerExit(leftControllerHit);
-            leftPointer.DestinationMarkerEnter += exitLeft;
+            leftPointer.DestinationMarkerExit += exitLeft;
 
             rightPointer.PointerExit(rightControllerHit);
-            rightPointer.DestinationMarkerEnter += exitRight;
+            rightPointer.DestinationMarkerExit += exitRight;
         }
     }
 
     private void enterLeft(object sender, DestinationMarkerEventArgs e)
     {
         startInteractionLeft = Time.time;
+        objectInteractedLeft = e.target.name;
     }
 
     private void enterRight(object sender, DestinationMarkerEventArgs e)
     {
         startInteractionRight = Time.time;
+        objectInteractedRight = e.target.name;
     }
 
     private void exitLeft(object sender, DestinationMarkerEventArgs e)
     {
         endInteractionLeft = Time.time;
-        addRecord(participantID, "Left", startInteractionLeft, endInteractionLeft, "PointerPosition.csv");
-
-        startInteractionLeft = 0f;
-        endInteractionLeft = 0f;
+        addRecord(participantID, "Left", objectInteractedLeft, startInteractionLeft, endInteractionLeft, filePath);
+        print("Pointer entered " + e.target.name + " on Controller index [" + e.controllerReference + "]");
     }
 
     private void exitRight(object sender, DestinationMarkerEventArgs e)
     {
         endInteractionRight = Time.time;
-        addRecord(participantID, "Right", startInteractionRight, endInteractionRight, "PointerPosition.csv");
-
-        startInteractionRight = 0f;
-        endInteractionRight = 0f;
+        addRecord(participantID, "Right", objectInteractedRight, startInteractionRight, endInteractionRight, filePath);
+        print("Pointer entered " + e.target.name + " on Controller index [" + e.controllerReference + "]");
     }
 
-    private void addRecord(string ID, string controllerType, float startTime, float endTime, string filePath)
+    private void addRecord(string ID, string controllerType, string interactedObject, float startTime, float endTime, string filePath)
     {
+        print("Writing to file");
         try
         {
             using (StreamWriter file = new StreamWriter(@filePath, true))
             {
-                file.WriteLine(ID + "," + controllerType + "," + startTime + "," + endTime);
+                file.WriteLine(ID + "," + controllerType + "," + interactedObject + "," + startTime + "," + endTime);
             }
         }
         catch (Exception ex)
         {
-            Debug.Log("Something went wrong!");
+            Debug.Log("Something went wrong! Error: " + ex.Message);
         }
     }
 }
+
+// End of File.
