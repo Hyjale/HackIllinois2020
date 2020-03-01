@@ -58,3 +58,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+/Assets/SolarSystem
+/Assets/SolarSystem.meta
+/Assets/VRKeys
+/Assets/VRKeys.meta
+

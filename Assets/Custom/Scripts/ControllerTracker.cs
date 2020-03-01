@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -17,16 +18,13 @@ public class ControllerTracker : MonoBehaviour
     [SerializeField] float timeStamp;
     [SerializeField] int index;
 
-    private List<string[]> recordEntry;
+    private bool startWriting;
 
-    public bool saveData;
-    public bool record;
-    public bool recording;
-
-    public string participantID = "NULL";
+    public string participantID = "someID";
 
     [SerializeField] int dropRate = 3;
     private int dropIndex = 0;
+    string filePath;
 
     private void Start()
     {
@@ -34,43 +32,21 @@ public class ControllerTracker : MonoBehaviour
         leftController = null;
         leftHandPosition = Vector3.zero;
         rightHandPosition = Vector3.zero;
-        recordEntry = new List<string[]>();
-
-        saveData = false;
-        recording = false;
+        
+        filePath = GetFilePath();
+        startWriting = true;
     }
 
     void Update()
     {
-        if (!record)
+        if (dropIndex == 0)
         {
-            if (recording)
-            {
-                //SaveRun();
-                recording = false;
-                index++;
-            }
-
-            return;
+            UpdateData();
+            UpdateRun();
         }
 
-        else
-        {
-            if (!recording)
-            {
-                //MakeRun();
-                recording = true;
-            }
-
-            if (dropIndex == 0)
-            {
-                UpdateData();
-                UpdateRun();
-                dropIndex++;
-                dropIndex = dropIndex % dropRate;
-            }
-            
-        }
+        dropIndex++;
+        dropIndex = dropIndex % dropRate;
     }
 
     void UpdateData()
@@ -120,34 +96,37 @@ public class ControllerTracker : MonoBehaviour
         rightData[5] = rightHandPosition.z.ToString();
         rightData[6] = timeStamp.ToString();
 
-        recordEntry.Add(leftData);
-        recordEntry.Add(rightData);
+        WriteDataLine(leftData);
+        WriteDataLine(rightData);
     }
 
-    public void SaveData()
+    public void WriteDataLine(string[] line)
     {
-        string[][] output = new string[recordEntry.Count][];
-
-        for (int i = 0; i < output.Length; i++)
+        print("Writing to file");
+        try
         {
-            output[i] = recordEntry[i];
+            if (startWriting)
+            {
+                using (StreamWriter file = new StreamWriter(@filePath, false))
+                {
+                    file.WriteLine("Index" + "," + "ID" + "," + "Hand" + "," + "XPos" + "," + "YPos" +
+                        "," + "ZPos" + "," + "Time");
+                }
+                startWriting = false;
+            }
+            else
+            {
+                using (StreamWriter file = new StreamWriter(@filePath, true))
+                {
+                    file.WriteLine(line[0] + "," + line[1] + "," + line[2] + "," + line[3] 
+                        + "," + line[4] + "," + line[5] + "," + line[6]);
+                }
+            }
         }
-
-        int length = output.GetLength(0);
-        string delimiter = ",";
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int j = 0; j < length; j++)
+        catch (Exception ex)
         {
-            sb.AppendLine(string.Join(delimiter, output[j]));
+            Debug.Log("Something went wrong! Error: " + ex.Message);
         }
-
-        string filePath = GetFilePath();
-
-        StreamWriter outStream = File.CreateText(filePath);
-        outStream.WriteLine(sb);
-        outStream.Close();
     }
 
     string GetFilePath()
